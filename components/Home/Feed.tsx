@@ -11,14 +11,19 @@ import Comment from "../Helper/Comment";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { handleAuthRequest } from "../utils/apiRequest";
-import { likeOrDislikePost, setPosts } from "@/store/postSlice";
+import { addComment, likeOrDislikePost, setPosts } from "@/store/postSlice";
 import { toast } from "sonner";
+import { setAuthUser } from "@/store/authSlice";
 
 const Feed = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const posts = useSelector((state: RootState) => state.posts.posts);
+  const [comment, setComment] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
+  console.log(user?.savedPosts);
 
   // Get all the post
   useEffect(() => {
@@ -45,6 +50,37 @@ const Feed = () => {
         dispatch(likeOrDislikePost({ postId: id, userId: user?._id }));
         toast.message(result.data.message);
       }
+    }
+  };
+
+  const handleSaveUnsave = async (id: string) => {
+    const result = await axios.post(
+      `${BASE_API_URL}/posts/save-unsave-post/${id}`,
+      {},
+      { withCredentials: true }
+    );
+
+    if (result.data.status == "success") {
+      dispatch(setAuthUser(result.data.data.user));
+      toast.success(result.data.message);
+    }
+  };
+
+  const addCommentHandler = async (id: string) => {
+    if (!comment) return;
+    const addCommentReq = async () =>
+      await axios.post(
+        `${BASE_API_URL}/posts/comment/${id}`,
+        { text: comment },
+        { withCredentials: true }
+      );
+
+    const result = await handleAuthRequest(addCommentReq);
+
+    if (result?.data?.status === "success") {
+      dispatch(addComment({ postId: id, comment: result?.data.data.comment }));
+      toast.success("Comment Posted");
+      setComment("");
     }
   };
 
@@ -112,7 +148,16 @@ const Feed = () => {
                   <MessageCircle className="cursor-pointer" />
                   <Send className="cursor-pointer" />
                 </div>
-                <Bookmark />
+                <Bookmark
+                  className={`cursor-pointer ${
+                    (user?.savedPosts as string[])?.some(
+                      (savedPostId: string) => savedPostId === post._id
+                    )
+                      ? "text-red-500"
+                      : ""
+                  }`}
+                  onClick={() => handleSaveUnsave(post._id)}
+                />
               </div>
               <h1 className="mt-2 text-sm font-semibold">
                 {post.likes.length} likes
@@ -124,8 +169,16 @@ const Feed = () => {
                   type="text"
                   placeholder="Add a Comment.."
                   className="flex-1 placeholder:text-gray-800 outline-none "
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                 />
-                <p className="text-sm font-semibold text-blue-700 cursor-pointer">
+                <p
+                  role="button"
+                  onClick={() => {
+                    addCommentHandler(post._id);
+                  }}
+                  className="text-sm font-semibold text-blue-700 cursor-pointer"
+                >
                   Post
                 </p>
               </div>

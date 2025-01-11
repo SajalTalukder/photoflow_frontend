@@ -21,7 +21,6 @@ const getUser = async () => {
     // Extract cookies (from Next.js request context)
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value; // Extract token from cookies
-    console.log(token);
 
     // Make Axios request with cookies manually added
     const res = await axios.get(`${BASE_API_URL}/users/me`, {
@@ -40,7 +39,6 @@ const getUser = async () => {
 const HomePage = async () => {
   // Fetch the user on the server-side
   const user: User = await getUser();
-  console.log(user);
 
   // Redirect if user is not found or unverified
   if (!user) {

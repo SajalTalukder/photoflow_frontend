@@ -16,9 +16,11 @@ interface ApiErrorResponse {
 
 export const handleAuthRequest = async <T>(
   requestCallback: () => Promise<T>,
-  setLoading: (loading: boolean) => void
+  setLoading?: (loading: boolean) => void
 ): Promise<T | null> => {
-  setLoading(true);
+  if (setLoading) {
+    setLoading(true);
+  }
 
   try {
     const response = await requestCallback();
@@ -36,6 +38,8 @@ export const handleAuthRequest = async <T>(
     }
     return null;
   } finally {
-    setLoading(false);
+    if (setLoading) {
+      setLoading(false);
+    }
   }
 };

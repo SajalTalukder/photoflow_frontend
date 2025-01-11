@@ -8,7 +8,7 @@ export interface User {
   followers: string[]; // Array of ObjectId as strings
   following: string[]; // Array of ObjectId as strings
   posts: Post[]; // Array of ObjectId as strings
-  savedPosts: string[]; // Array of ObjectId as strings
+  savedPosts: string[] | Post[]; // Array of ObjectId as strings
   isVerified: boolean; // Optional, defaults to false
 }
 

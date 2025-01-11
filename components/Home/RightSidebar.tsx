@@ -64,14 +64,15 @@ const RightSidebar = () => {
       </div>
       {suggestedUser?.slice(0, 5).map((s_user) => {
         return (
-          <div key={s_user._id} className="mt-6">
+          <div
+            key={s_user._id}
+            className="mt-6 cursor-pointer"
+            onClick={() => {
+              router.push(`/profile/${s_user._id}`);
+            }}
+          >
             <div className="flex items-center justify-between">
-              <div
-                className="flex items-center space-x-4 cursor-pointer"
-                onClick={() => {
-                  router.push(`/profile/${s_user._id}`);
-                }}
-              >
+              <div className="flex items-center space-x-4 cursor-pointer">
                 <Avatar className="w-9 h-9">
                   <AvatarImage
                     src={s_user?.profilePicture}
@@ -87,7 +88,7 @@ const RightSidebar = () => {
                 </div>
               </div>
               <h1 className="font-medium text-blue-700 cursor-pointer">
-                Follow
+                Details
               </h1>
             </div>
           </div>

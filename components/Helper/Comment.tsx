@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import DotButton from "./DotButton";
 import { Post, User } from "@/types";
 import { Button } from "../ui/button";
+import { BASE_API_URL } from "@/server";
+import { handleAuthRequest } from "../utils/apiRequest";
+import axios from "axios";
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { addComment } from "@/store/postSlice";
 
 type Props = {
   user: User | null;
@@ -17,6 +24,27 @@ type Props = {
 };
 
 const Comment = ({ user, post }: Props) => {
+  const [comment, setComment] = useState("");
+  const dispatch = useDispatch();
+
+  const addCommentHandler = async (id: string) => {
+    if (!comment) return;
+    const addCommentReq = async () =>
+      await axios.post(
+        `${BASE_API_URL}/posts/comment/${id}`,
+        { text: comment },
+        { withCredentials: true }
+      );
+
+    const result = await handleAuthRequest(addCommentReq);
+
+    if (result?.data?.status === "success") {
+      dispatch(addComment({ postId: id, comment: result?.data.data.comment }));
+      toast.success("Comment Posted");
+      setComment("");
+    }
+  };
+
   return (
     <div>
       <Dialog>
@@ -46,7 +74,7 @@ const Comment = ({ user, post }: Props) => {
                   </Avatar>
 
                   <div>
-                    <p className="font-semibold text-xs">{user?.username}</p>
+                    <p className="font-semibold text-sm">{user?.username}</p>
                     {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
                   </div>
                 </div>
@@ -66,8 +94,11 @@ const Comment = ({ user, post }: Props) => {
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
 
-                      <div>
-                        <p className="font-semibold text-xs">{item.text}</p>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-sm font-bold">
+                          {item?.user?.username}
+                        </p>
+                        <p className="font-normal text-sm">{item.text}</p>
                         {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
                       </div>
                     </div>
@@ -78,14 +109,17 @@ const Comment = ({ user, post }: Props) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
-                    // value={text}
-                    // onChange={changeEventHandler}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
                     placeholder="Add a comment..."
                     className="w-full outline-none border text-sm border-gray-300 p-2 rounded"
                   />
                   <Button
                     // disabled={!text.trim()}
                     // onClick={sendMessageHandler}
+                    onClick={() => {
+                      if (post?._id) addCommentHandler(post._id);
+                    }}
                     variant="outline"
                   >
                     Send

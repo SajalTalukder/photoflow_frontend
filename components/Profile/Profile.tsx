@@ -10,30 +10,30 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { handleAuthRequest } from "@/components/utils/apiRequest";
+import { cn } from "@/lib/utils";
 import { BASE_API_URL } from "@/server";
 import { RootState } from "@/store/store";
 import { User } from "@/types";
 import axios from "axios";
-import {
-  Bookmark,
-  Grid,
-  Heart,
-  Loader,
-  MenuIcon,
-  MessageCircle,
-} from "lucide-react";
-import Image from "next/image";
+import { Bookmark, Grid, Loader, MenuIcon } from "lucide-react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Post from "./Post";
+import Save from "./Save";
+
+import { useFollowUnfollow } from "../../hooks/use-auth";
 
 type Props = {
   id: string;
 };
 
 const Profile = ({ id }: Props) => {
+  const { handleFollowUnFollow } = useFollowUnfollow();
   const user = useSelector((state: RootState) => state?.auth.user);
+  const [postOrSave, setPostOrSave] = useState<string>("POST");
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -43,6 +43,7 @@ const Profile = ({ id }: Props) => {
   const [userPofile, setUserProfile] = useState<User>();
 
   const isOwnProfile = user?._id === id;
+  const isFollowing = user?.following.includes(id);
 
   useEffect(() => {
     if (!user) {
@@ -102,7 +103,16 @@ const Profile = ({ id }: Props) => {
                     <Button variant={"secondary"}>Edit Profile</Button>
                   </Link>
                 )}
-                {!isOwnProfile && <Button variant={"secondary"}>Follow</Button>}
+                {!isOwnProfile && (
+                  <Button
+                    onClick={() => {
+                      handleFollowUnFollow(id);
+                    }}
+                    variant={isFollowing ? "destructive" : "secondary"}
+                  >
+                    {isFollowing ? "UnFollow" : "Follow"}
+                  </Button>
+                )}
               </div>
               <div className="flex items-center space-x-8 mt-6 mb-6">
                 <div>
@@ -130,46 +140,29 @@ const Profile = ({ id }: Props) => {
           {/* Bottom Post and saved */}
           <div className="mt-10">
             <div className="flex items-center justify-center space-x-14">
-              <div className="flex items-center space-x-2">
-                <Grid />{" "}
-                <span className="font-semibold cursor-pointer"> Post</span>
+              <div
+                className={cn(
+                  "flex items-center space-x-2 cursor-pointer",
+                  postOrSave === "POST" && "text-blue-500 "
+                )}
+                onClick={() => setPostOrSave("POST")}
+              >
+                <Grid />
+                <span className="font-semibold "> Post</span>
               </div>
-              <div className="flex items-center space-x-2 cursor-pointer">
+              <div
+                className={cn(
+                  "flex items-center space-x-2 cursor-pointer",
+                  postOrSave === "SAVE" && "text-blue-500 "
+                )}
+                onClick={() => setPostOrSave("SAVE")}
+              >
                 <Bookmark />
-                <span className="font-semibold">Saved</span>
+                <span className="font-semibold ">Saved</span>
               </div>
             </div>
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {userPofile?.posts?.map((post) => {
-                return (
-                  <div
-                    key={post?._id}
-                    className="relative group overflow-hidden"
-                  >
-                    <Image
-                      src={`${post?.image?.url}`}
-                      alt="img"
-                      width={300}
-                      height={300}
-                      className=" w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {/* Icons */}
-                      <div className="flex space-x-6">
-                        <button className="p-2  rounded-full text-white space-x-2 flex items-center font-bold">
-                          <Heart className="w-7 h-7" />{" "}
-                          <span>{post?.likes.length}</span>
-                        </button>
-                        <button className="p-2  rounded-full text-white space-x-2 flex items-center font-bold">
-                          <MessageCircle className="w-7 h-7" />
-                          <span>{post?.comments.length}</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            {postOrSave === "POST" && <Post userPofile={userPofile} />}
+            {postOrSave === "SAVE" && <Save userPofile={userPofile} />}
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
-// app/page.tsx (Server Component)
+"use client";
+
 import Feed from "@/components/Home/Feed";
 import LeftSideBar from "@/components/Home/LeftSideBar";
 import RightSidebar from "@/components/Home/RightSidebar";
@@ -9,45 +10,51 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { BASE_API_URL } from "@/server";
-import { User } from "@/types";
-import axios from "axios";
+
+import { RootState } from "@/store/store";
+
 import { MenuIcon } from "lucide-react";
-import { cookies } from "next/headers";
+
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-const getUser = async () => {
-  try {
-    // Extract cookies (from Next.js request context)
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value; // Extract token from cookies
+// const getUser = async () => {
+//   try {
+//     // Extract cookies (from Next.js request context)
+//     const cookieStore = await cookies();
+//     const token = cookieStore.get("token")?.value; // Extract token from cookies
 
-    // Make Axios request with cookies manually added
-    const res = await axios.get(`${BASE_API_URL}/users/me`, {
-      headers: {
-        Cookie: `token=${token}`, // Add the token to the Cookie header
-      },
-      withCredentials: true, // Ensure credentials are sent
-    });
+//     // Make Axios request with cookies manually added
+//     const res = await axios.get(`${BASE_API_URL}/users/me`, {
+//       headers: {
+//         Cookie: `token=${token}`, // Add the token to the Cookie header
+//       },
+//       withCredentials: true, // Ensure credentials are sent
+//     });
 
-    return res.data.data.user;
-  } catch (error) {
-    return null;
-  }
-};
+//     return res.data.data.user;
+//   } catch (error) {
+//     return null;
+//   }
+// };
 
-const HomePage = async () => {
+const HomePage = () => {
   // Fetch the user on the server-side
-  const user: User = await getUser();
+  // const user: User = await getUser();
 
-  // Redirect if user is not found or unverified
-  if (!user) {
-    redirect("/auth/signup");
-  }
+  const user = useSelector((state: RootState) => state.auth.user);
 
-  if (user && !user.isVerified) {
-    redirect("/auth/verify");
-  }
+  useEffect(() => {
+    // Redirect if user is not found or unverified
+    if (!user) {
+      redirect("/auth/signup");
+    }
+
+    if (user && !user.isVerified) {
+      redirect("/auth/verify");
+    }
+  }, [user]);
 
   // Return JSX for the hydrated page
   return (

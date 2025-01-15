@@ -16,7 +16,10 @@ const RightSidebar = () => {
   const [suggestedUser, setSuggestedUser] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
+    console.log("LOGGING INSIDE THE RIGHT SIDEBAR");
+
     const getSuggestedUser = async () => {
       const getSuggestedUserReq = async () =>
         axios.get(`${BASE_API_URL}/users/suggested-user`, {
@@ -24,6 +27,7 @@ const RightSidebar = () => {
         });
 
       const result = await handleAuthRequest(getSuggestedUserReq, setIsLoading);
+      console.log(result);
 
       if (result) setSuggestedUser(result?.data.data.users);
     };

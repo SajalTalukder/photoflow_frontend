@@ -32,8 +32,6 @@ const DotButton = ({ post, user }: Props) => {
   const isFollowing = post?.user?._id
     ? user?.following.includes(post.user._id)
     : false;
-  console.log("IS FOLLOWING", isFollowing);
-  console.log("USER", user);
 
   const dispatch = useDispatch();
 

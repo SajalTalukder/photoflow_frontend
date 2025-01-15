@@ -23,7 +23,7 @@ const Feed = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  console.log(user?.savedPosts);
+  // console.log(user?.savedPosts);
 
   // Get all the post
   useEffect(() => {

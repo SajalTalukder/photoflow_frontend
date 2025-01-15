@@ -17,14 +17,16 @@ import axios from "axios";
 import { MenuIcon } from "lucide-react";
 
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { handleAuthRequest } from "../utils/apiRequest";
 import { setAuthUser } from "@/store/authSlice";
 
+import { RootState } from "@/store/store";
+
 const Home = () => {
   const dispatch = useDispatch();
-  const [user, setUser] = useState("");
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     const getAuthUser = async () => {
@@ -36,7 +38,6 @@ const Home = () => {
 
       if (result) {
         dispatch(setAuthUser(result.data.data.user));
-        setUser(result.data.data.user);
       }
     };
     getAuthUser();

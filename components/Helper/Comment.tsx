@@ -74,7 +74,9 @@ const Comment = ({ user, post }: Props) => {
                   </Avatar>
 
                   <div>
-                    <p className="font-semibold text-sm">{user?.username}</p>
+                    <p className="font-semibold text-sm">
+                      {post?.user?.profilePicture}
+                    </p>
                     {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
                   </div>
                 </div>

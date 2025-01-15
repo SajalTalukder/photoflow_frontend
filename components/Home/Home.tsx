@@ -43,7 +43,10 @@ const Home = () => {
     getAuthUser();
   }, [dispatch]);
 
-  if (!user) return redirect("/auth/login");
+  useEffect(() => {
+    if (!user) return redirect("/auth/login");
+  }, [user]);
+
   return (
     <div className="flex  ">
       <div className="w-[20%] hidden md:block border-r-2 h-screen fixed ">

@@ -1,6 +1,6 @@
 import Profile from "@/components/Profile/Profile";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+// import { cookies } from "next/headers";
+// import { redirect } from "next/navigation";
 import React from "react";
 
 const ProfilePage = async ({ params }: { params: Promise<{ id: string }> }) => {

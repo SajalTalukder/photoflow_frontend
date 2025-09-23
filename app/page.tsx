@@ -1,6 +1,16 @@
 import Home from "@/components/Home/Home";
 
-const HomePage = () => {
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+const HomePage = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
+    redirect("/auth/login");
+  }
+
   return (
     <>
       <Home />

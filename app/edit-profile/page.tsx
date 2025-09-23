@@ -4,12 +4,12 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const EditProfilePage = async () => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
+  // const cookieStore = await cookies();
+  // const token = cookieStore.get("token")?.value;
 
-  if (!token) {
-    redirect("/auth/login");
-  }
+  // if (!token) {
+  //   redirect("/auth/login");
+  // }
   return (
     <>
       <EditProfile />

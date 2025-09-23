@@ -10,42 +10,54 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { BASE_API_URL } from "@/server";
+// import { BASE_API_URL } from "@/server";
 
-import axios from "axios";
+// import axios from "axios";
 
-import { MenuIcon } from "lucide-react";
+import { Loader, MenuIcon } from "lucide-react";
 
-import { redirect } from "next/navigation";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { handleAuthRequest } from "../utils/apiRequest";
-import { setAuthUser } from "@/store/authSlice";
+// import { redirect } from "next/navigation";
+// import { useEffect, useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { handleAuthRequest } from "../utils/apiRequest";
+// import { setAuthUser } from "@/store/authSlice";
 
-import { RootState } from "@/store/store";
+// import { RootState } from "@/store/store";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.auth.user);
+  // const dispatch = useDispatch();
+  // const user = useSelector((state: RootState) => state.auth.user);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const getAuthUser = async () => {
-      const getAuthUserReq = async () =>
-        await axios.get(`${BASE_API_URL}/users/me`, {
-          withCredentials: true,
-        });
-      const result = await handleAuthRequest(getAuthUserReq);
+  // useEffect(() => {
+  //   const getAuthUser = async () => {
+  //     const getAuthUserReq = async () =>
+  //       await axios.get(`${BASE_API_URL}/users/me`, {
+  //         withCredentials: true,
+  //       });
+  //     const result = await handleAuthRequest(getAuthUserReq, setIsLoading);
 
-      if (result) {
-        dispatch(setAuthUser(result.data.data.user));
-      }
-    };
-    getAuthUser();
-  }, [dispatch]);
+  //     if (result) {
+  //       dispatch(setAuthUser(result.data.data.user));
+  //     }
+  //   };
+  //   getAuthUser();
+  // }, [dispatch]);
 
-  useEffect(() => {
-    if (!user) return redirect("/auth/login");
-  }, [user]);
+  // useEffect(() => {
+  //   console.log("USER inside USEEFFECT", user);
+  //   if (!user) return redirect("/auth/login");
+  // }, [user]);
+
+  // console.log("USER OUTSIDE USEEFFECT", user);
+
+  // if (isLoading) {
+  //   return (
+  //     <div className="w-full h-screen flex items-center justify-center flex-col">
+  //       <Loader className="animate-spin" />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex  ">
@@ -55,9 +67,12 @@ const Home = () => {
       <div className="flex-1 md:ml-[20%] overflow-y-auto ">
         <div className="md:hidden">
           <Sheet>
-            <SheetTrigger>
-              <MenuIcon />
-            </SheetTrigger>
+            <div className="flex items-center justify-between">
+              <SheetTrigger>
+                <MenuIcon />
+              </SheetTrigger>
+            </div>
+
             <SheetContent>
               <SheetTitle></SheetTitle>
               <SheetDescription></SheetDescription>

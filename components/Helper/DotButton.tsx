@@ -30,7 +30,7 @@ const DotButton = ({ post, user }: Props) => {
   const { handleFollowUnFollow } = useFollowUnfollow();
   const isOwnPost = post?.user?._id === user?._id;
   const isFollowing = post?.user?._id
-    ? user?.following.includes(post.user._id)
+    ? user?.following?.includes(post.user._id)
     : false;
 
   const dispatch = useDispatch();

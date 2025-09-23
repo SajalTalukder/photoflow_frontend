@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "PhotoFlow is developed using next js and node ",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

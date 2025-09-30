@@ -99,7 +99,7 @@ const Profile = ({ id }: Props) => {
               <div className="flex items-center space-x-8">
                 <h1 className="text-2xl font-bold">{userPofile?.username}</h1>
                 {isOwnProfile && (
-                  <Link href="/edit-profile">
+                  <Link href="/profile/edit-profile">
                     <Button variant={"secondary"}>Edit Profile</Button>
                   </Link>
                 )}

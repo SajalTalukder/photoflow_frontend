@@ -85,7 +85,7 @@ const Verify = () => {
     if (result) {
       dispatch(setAuthUser(result.data.data.user));
       toast.success(result.data.message);
-      router.push("/");
+      router.push("/feed");
     }
   };
 

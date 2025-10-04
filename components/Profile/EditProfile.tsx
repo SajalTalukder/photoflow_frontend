@@ -1,5 +1,5 @@
 "use client";
-import LeftSideBar from "@/components/Home/LeftSideBar";
+import LeftSideBar from "@/components/Feed/LeftSideBar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,

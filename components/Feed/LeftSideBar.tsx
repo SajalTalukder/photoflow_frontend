@@ -69,7 +69,7 @@ const LeftSideBar = () => {
     );
     dispatch(setAuthUser(null));
     toast.success("Logout successfull");
-    router.push("/auth/login");
+    router.push("/");
   };
 
   const handleSideBar = (label: string) => {

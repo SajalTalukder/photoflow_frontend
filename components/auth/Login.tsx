@@ -56,7 +56,7 @@ const Login = () => {
       //   toast message
       toast.success(result.data.message);
       //   redirect user to home page
-      router.push("/");
+      router.push("/feed");
     }
   };
 

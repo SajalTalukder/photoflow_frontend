@@ -1,8 +1,8 @@
 "use client";
 
-import Feed from "@/components/Home/Feed";
-import LeftSideBar from "@/components/Home/LeftSideBar";
-import RightSidebar from "@/components/Home/RightSidebar";
+import Feed from "@/components/Feed/Feed";
+import LeftSideBar from "@/components/Feed/LeftSideBar";
+import RightSidebar from "@/components/Feed/RightSidebar";
 import {
   Sheet,
   SheetContent,
@@ -13,7 +13,7 @@ import {
 
 import { MenuIcon } from "lucide-react";
 
-const Home = () => {
+const MainFeed = () => {
   return (
     <div className="flex  ">
       <div className="w-[20%] hidden md:block border-r-2 h-screen fixed ">
@@ -45,4 +45,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MainFeed;

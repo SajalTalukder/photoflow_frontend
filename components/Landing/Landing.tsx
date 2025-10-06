@@ -1,10 +1,15 @@
+"use client";
 import { Camera, Heart, MessageCircle, Share2, Users, Zap } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Landing = () => {
+  const user = useSelector((state: RootState) => state?.auth.user);
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-rose-50">
       <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
@@ -12,18 +17,29 @@ const Landing = () => {
           <div className="flex justify-between items-center h-16">
             <Image src="/images/logo.png" alt="logo" width={140} height={140} />
 
-            <div className="flex items-center gap-4">
-              <Link href="/auth/login">
-                <Button variant="ghost" className="font-medium">
-                  Log in
-                </Button>
+            {!user && (
+              <div className="flex items-center gap-4">
+                <Link href="/auth/login">
+                  <Button variant="ghost" className="font-medium">
+                    Log in
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button className="bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-medium">
+                    Sign up
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {user && (
+              <Link href="/feed">
+                <Avatar>
+                  <AvatarImage src={user.profilePicture} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
               </Link>
-              <Link href="/auth/signup">
-                <Button className="bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-medium">
-                  Sign up
-                </Button>
-              </Link>
-            </div>
+            )}
           </div>
         </div>
       </nav>

@@ -15,11 +15,13 @@ export default async function ProtectedLayout({
     redirect("/");
   }
 
+  console.log("🔐 Token found in cookies:", token);
+
   try {
     const res = await fetch(`${BASE_API_URL}/users/me`, {
       method: "GET",
       headers: {
-        Cookie: cookieStore.toString(),
+        Authorization: `Bearer ${token}`,
       },
       cache: "no-store",
     });
@@ -32,6 +34,7 @@ export default async function ProtectedLayout({
     const data = await res.json();
 
     const user = data?.data?.user;
+    console.log("✅ User fetched successfully:", user);
 
     if (!user) {
       redirect("/");

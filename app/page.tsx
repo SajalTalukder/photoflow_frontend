@@ -1,4 +1,3 @@
-import MainFeed from "@/components/Feed/MainFeed";
 import Landing from "@/components/Landing/Landing";
 import React from "react";
 

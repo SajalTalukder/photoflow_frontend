@@ -91,7 +91,7 @@ const CreatePostModal = ({ isOpen, onClose }: Props) => {
       setPreviewImage(null); // Reset preview
       setCaption(""); // Reset the caption
       onClose(); // Close the modal
-      router.push("/");
+      router.push("/feed");
       router.refresh();
     }
   };

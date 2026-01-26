@@ -1,5 +1,13 @@
 "use client";
-import { Camera, Heart, MessageCircle, Share2, Users, Zap } from "lucide-react";
+import {
+  Camera,
+  Heart,
+  Loader,
+  MessageCircle,
+  Share2,
+  Users,
+  Zap,
+} from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "../ui/button";
@@ -7,9 +15,28 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useUser } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
 
 const Landing = () => {
+  const router = useRouter();
   const user = useSelector((state: RootState) => state?.auth.user);
+  const { user: authUser, loading } = useUser();
+
+  // While loading, show spinner
+  if (loading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center flex-col">
+        <Loader className="w-12 h-12 animate-spin mb-4" />
+      </div>
+    );
+  }
+
+  if (authUser) {
+    router.replace("/feed");
+    return null; // prevents rendering while redirect happens
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-rose-50">
       <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">

@@ -33,7 +33,7 @@ const Comment = ({ user, post }: Props) => {
       await axios.post(
         `${BASE_API_URL}/posts/comment/${id}`,
         { text: comment },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
     const result = await handleAuthRequest(addCommentReq);
@@ -75,7 +75,7 @@ const Comment = ({ user, post }: Props) => {
 
                   <div>
                     <p className="font-semibold text-sm">
-                      {post?.user?.profilePicture}
+                      {post?.user?.username}
                     </p>
                     {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
                   </div>

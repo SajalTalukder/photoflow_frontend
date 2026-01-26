@@ -42,7 +42,7 @@ const Verify = () => {
 
   const handleChange = (
     index: number,
-    event: ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>,
   ): void => {
     const { value } = event.target;
 
@@ -60,7 +60,7 @@ const Verify = () => {
 
   const handleKeyDown = (
     index: number,
-    event: KeyboardEvent<HTMLInputElement>
+    event: KeyboardEvent<HTMLInputElement>,
   ): void => {
     if (
       event.key === "Backspace" &&
@@ -77,7 +77,7 @@ const Verify = () => {
       await axios.post(
         `${BASE_API_URL}/users/verify`,
         { otp: otpValue },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
     const result = await handleAuthRequest(verifyRequest, setIsLoading);

@@ -33,25 +33,19 @@ export const useFollowUnfollow = () => {
 
 export const useUser = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true); // start as true
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getMe = async () => {
-      const getMeReq = async () =>
-        axios.get(`${BASE_API_URL}/users/me`, { withCredentials: true });
-
       try {
-        const result = await handleAuthRequest(getMeReq, setLoading);
+        const result = await axios.get(`${BASE_API_URL}/users/me`, {
+          withCredentials: true,
+        });
 
-        if (result?.data?.data?.user) {
-          setUser(result.data.data.user);
-        } else {
-          setUser(null); // explicitly set null if not logged in
-        }
-      } catch (err) {
-        console.log(err);
-
-        setUser(null); // explicitly set null on error
+        setUser(result.data?.data?.user ?? null);
+      } catch (error) {
+        // 🔕 Completely silent
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -59,7 +53,6 @@ export const useUser = () => {
 
     getMe();
   }, []);
-  console.log(user, loading);
 
   return { user, loading };
 };

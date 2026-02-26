@@ -16,7 +16,8 @@ interface ApiErrorResponse {
 
 export const handleAuthRequest = async <T>(
   requestCallback: () => Promise<T>,
-  setLoading?: (loading: boolean) => void
+  setLoading?: (loading: boolean) => void,
+  showError: boolean = true, // 👈 default true
 ): Promise<T | null> => {
   if (setLoading) {
     setLoading(true);
@@ -29,13 +30,14 @@ export const handleAuthRequest = async <T>(
     const axiosError = error as AxiosError<ApiErrorResponse>;
     console.log(error);
 
-    if (axiosError?.response?.data?.message) {
-      console.log(axiosError.response.data.message);
-
-      toast.error(axiosError.response.data.message); // Display the error message
-    } else {
-      toast.error("An unexpected error occurred.");
+    if (showError) {
+      if (axiosError?.response?.data?.message) {
+        toast.error(axiosError.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     }
+
     return null;
   } finally {
     if (setLoading) {

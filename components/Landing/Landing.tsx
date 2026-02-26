@@ -12,16 +12,19 @@ import Link from "next/link";
 
 import { Button } from "../ui/button";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useUser } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
+import { User } from "@/types";
 
 const Landing = () => {
   const router = useRouter();
-  const user = useSelector((state: RootState) => state?.auth.user);
-  const { user: authUser, loading } = useUser();
+
+  const { user, loading } = useUser() as {
+    user: User;
+    loading: boolean;
+  };
 
   // While loading, show spinner
   if (loading) {
@@ -32,10 +35,11 @@ const Landing = () => {
     );
   }
 
-  if (authUser) {
+  if (user) {
     router.replace("/feed");
-    return null; // prevents rendering while redirect happens
   }
+
+  console.log("FEED PAGE", user);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-rose-50">
@@ -62,7 +66,9 @@ const Landing = () => {
             {user && (
               <Link href="/feed">
                 <Avatar>
-                  <AvatarImage src={user.profilePicture} />
+                  <AvatarImage
+                    src={`${user.profilePicture || "/default-avatar.png"}`}
+                  />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </Link>
